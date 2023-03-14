@@ -1,4 +1,5 @@
 using System;
+using System.Reflection;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -95,7 +96,7 @@ public class ShowIfPropertyDrawer : PropertyDrawer
 				}
 			}
 
-			return (bool)parentObject.GetType().GetMethod(attribute.preficate).Invoke(parentObject, Array.Empty<object>());
+			return (bool)parentObject.GetType().GetMethod(attribute.preficate, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic).Invoke(parentObject, Array.Empty<object>());
 		}
 		catch (Exception e)
 		{
