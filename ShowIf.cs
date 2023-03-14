@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEditor;
 #endif
 
-[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Class | AttributeTargets.Struct, Inherited = true)]
+[AttributeUsage(AttributeTargets.Field)]
 public class ShowIfAttribute : PropertyAttribute
 {
 	public string preficate = "";
@@ -76,11 +76,9 @@ public class ShowIfPropertyDrawer : PropertyDrawer
 		try
 		{
 			object parentObject = property.serializedObject.targetObject;
-
 			var parentPath = property.propertyPath.Substring(0, property.propertyPath.LastIndexOf('.'));
-
 			var tokens = Tokenize(parentPath);
-
+            
 			for (int i = 0; i < tokens.Count; ++i)
 			{
 				if (tokens[i] == "Array")
@@ -95,7 +93,7 @@ public class ShowIfPropertyDrawer : PropertyDrawer
 					++i; // skip name
 				}
 			}
-
+            
 			return (bool)parentObject.GetType().GetMethod(attribute.preficate, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic).Invoke(parentObject, Array.Empty<object>());
 		}
 		catch (Exception e)
@@ -103,7 +101,6 @@ public class ShowIfPropertyDrawer : PropertyDrawer
 			Debug.LogError($"Could not evaluate ShowIf attribute: {e}");
 			return true;
 		}
-
 	}
 }
 #endif
